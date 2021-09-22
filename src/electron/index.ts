@@ -150,12 +150,14 @@ autoUpdater.on("error", (err) => {
 });
 
 ipcMain.on('asynchronous-message', (event, arg) => {
+  // eslint-disable-next-line no-console
   console.log(arg)
 
   event.sender.send('asynchronous-reply', 'async pong')
 })
 
 ipcMain.on('synchronous-message', (event, arg) => {
+  // eslint-disable-next-line no-console
   console.log(arg)
 
   event.returnValue = 'sync pong'

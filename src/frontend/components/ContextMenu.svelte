@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  export let contextType = null;
+  export let contextType: string;
   export let cache: Promise<Cache>;
-  export let sidebarTarget = null;
-  export let resetSidebar = null;
-  let reset;
+  export let sidebarTarget: HTMLButtonElement;
+  export let resetSidebar: () => void;
+  let reset: () => void;
 
-  async function download(noteName) {
+  async function download(noteName: string): Promise<void> {
     const note = (await (await cache).matchAll()).filter((item) => item.headers.get("content-disposition").includes(noteName))[0];
 
     const data = URL.createObjectURL(new Blob([await note.clone().text()], {type: "text/plain"}));
@@ -51,7 +51,6 @@
     const cutBtn = document.querySelector("#couper");
     const pasteBtn = document.querySelector("#coller");
     const selectAll = document.querySelector("#tout__selectionner");
-    const deleteNote = document.querySelector("#delete__note");
 
     copyBtn.addEventListener("click", () => {
       const {value, selectionStart, selectionEnd} = textarea;
@@ -60,7 +59,7 @@
       reset();
     });
 
-    cutBtn.addEventListener("click", (e) => {
+    cutBtn.addEventListener("click", () => {
       const { value, selectionStart, selectionEnd} = textarea;
       const val = value.slice(selectionStart, selectionEnd);
       copy(val);
@@ -70,7 +69,7 @@
       reset();
     });
 
-    pasteBtn.addEventListener("click", async (e) => {
+    pasteBtn.addEventListener("click", async () => {
       const { value, selectionStart, selectionEnd} = textarea
       const clipboard = await navigator.clipboard.readText()
 

@@ -131,7 +131,7 @@
 </style>
 
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { removeChildren } from "../App/removeChildren";
   import ContextMenu from "./components/ContextMenu.svelte"
 
@@ -139,11 +139,11 @@
   let name: string = "";
   let selected: string | null = null;
   let contextType = "textarea";
-  let cache;
-  let sidebarTarget;
-  let reset;
-  let deleteN;
-  let download;
+  let cache: Promise<Cache>;
+  let sidebarTarget: HTMLButtonElement;
+  let reset: () => void;
+  let deleteN: () => Promise<void>;
+  let download: () => Promise<void>;
 
   onMount(() => {
     const ctx: HTMLDivElement = document.querySelector(".right__click");
@@ -153,11 +153,9 @@
 
     const saveNote = document.querySelector<HTMLButtonElement>("#save");
     const newNote = document.querySelector<HTMLButtonElement>("#new");
-    const deleteNote = document.querySelector<HTMLButtonElement>("#delete");
-    const downloadNote = document.querySelector<HTMLButtonElement>("#download");
 
     cache = caches.open("v1");
-    const write = async (url: string, content, type= "text/plain"): Promise<void> => {
+    const write = async (url: string, content: string, type = "text/plain"): Promise<void> => {
       return (await cache).put(url, new Response(content, {
         headers: {
           "content-type": `${type}; charset=utf-8`,
@@ -175,7 +173,7 @@
       return (await cache).match(url);
     };
 
-    const readAll = async (): Promise<Response[]> => {
+    const readAll = async (): Promise<readonly Response[]> => {
       return (await cache).matchAll();
     }
 
@@ -210,7 +208,7 @@
           textarea.focus();
         });
         btn.addEventListener("contextmenu", (e) => {
-          sidebarTarget = e.target;
+          sidebarTarget = e.target as HTMLButtonElement;
           e.preventDefault()
           ctx.style.display = "flex";
           ctx.style.left = `${e.x}px`;
@@ -322,7 +320,7 @@
         excluded.push(<HTMLDivElement>c)
       }
 
-      if(!excluded.includes(e.target)) {
+      if(!excluded.includes(e.target as HTMLDivElement)) {
         ctx.style.display = "none";
       }
     });
