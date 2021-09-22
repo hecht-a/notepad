@@ -1,0 +1,38 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "svelte"],
+    "sourceMap": true,
+    "target": "ESNext",
+    "stripInternal": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmitOnError": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": ["es2015", "esnext", "dom"],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@App/*": [
+        "./src/App/*"
+      ],
+      "@Components/*": [
+        "./src/components/*"
+      ]
+    }
+  },
+  "include": ["src/frontend/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
+}
