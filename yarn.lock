@@ -572,6 +572,11 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
+"@labeg/alertify.js@^2.0.62":
+  version "2.0.62"
+  resolved "https://registry.yarnpkg.com/@labeg/alertify.js/-/alertify.js-2.0.62.tgz#c789d960c8d0e69a8bf3cd44b63ee9761085e136"
+  integrity sha512-3mWA44azSwCR/FMfV2IxkvwWpwY+J8kBcZNPiC3fh2+7NWDnVOLD2IBraYYYxpDOIqLS0V2BAnF4UPsLYw8MvQ==
+
 "@malept/cross-spawn-promise@^1.1.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@malept/cross-spawn-promise/-/cross-spawn-promise-1.1.1.tgz#504af200af6b98e198bce768bc1730c6936ae01d"
@@ -635,7 +640,7 @@
     is-module "^1.0.0"
     resolve "^1.19.0"
 
-"@rollup/plugin-typescript@^8.2.1":
+"@rollup/plugin-typescript@^8.2.5":
   version "8.2.5"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-8.2.5.tgz#e0319761b2b5105615e5a0c371ae05bc2984b7de"
   integrity sha512-QL/LvDol/PAGB2O0S7/+q2HpSUNodpw7z6nGn9BfoVCPOZ0r4EALrojFU29Bkoi2Hr2jgTocTejJ5GGWZfOxbQ==
@@ -1907,6 +1912,11 @@ detect-node@^2.0.4:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
+
+dexie@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-3.0.3.tgz#ede63849dfe5f07e13e99bb72a040e8ac1d29dab"
+  integrity sha512-BSFhGpngnCl1DOr+8YNwBDobRMH0ziJs2vts69VilwetHYOtEDcLqo7d/XiIphM0tJZ2rPPyAGd31lgH2Ln3nw==
 
 diff-sequences@^27.0.6:
   version "27.0.6"

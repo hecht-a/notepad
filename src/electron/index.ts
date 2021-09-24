@@ -26,10 +26,13 @@ const createWindow = () => {
     width: 900,
     height: 680,
     webPreferences: {
-      devTools: !isProd,
+      // devTools: !isProd,
+      devTools: true,
       contextIsolation: true,
       enableRemoteModule: false,
     },
+    // TODO: set custom icon
+    icon: join(__dirname, "../public", "image0.icns")
   });
 
   const url =

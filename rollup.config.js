@@ -55,8 +55,8 @@ export default {
     // a separate file - better for performance
     css({
       output: "bundle.css",
-      mangle: production ? true : false,
-      compress: production ? true : false,
+      mangle: production,
+      compress: production,
     }),
 
     // If you have external dependencies installed from

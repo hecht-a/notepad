@@ -2,43 +2,14 @@
   import { onMount } from "svelte";
 
   export let contextType: string;
-  export let cache: Promise<Cache>;
   export let sidebarTarget: HTMLButtonElement;
   export let resetSidebar: () => void;
+  export let deleteNote: (name: string) => Promise<void>;
+  export let download: (name: string) => Promise<void>;
   let reset: () => void;
-
-  async function download(noteName: string): Promise<void> {
-    const note = (await (await cache).matchAll()).filter((item) => item.headers.get("content-disposition").includes(noteName))[0];
-
-    const data = URL.createObjectURL(new Blob([await note.clone().text()], {type: "text/plain"}));
-
-    const link = document.createElement('a');
-    link.href = data;
-    link.download = noteName;
-
-    link.dispatchEvent(
-      new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        view: window
-      })
-    );
-
-    setTimeout(() => {
-      URL.revokeObjectURL(data);
-      link.remove();
-      reset();
-    }, 100);
-  }
 
   function copy(value: string): Promise<void> {
     return navigator.clipboard.writeText(value);
-  }
-
-  const deleteNoteFn = async (url: string): Promise<boolean> => {
-    await (await cache).delete(url)
-    resetSidebar();
-    return;
   }
 
   onMount(() => {
@@ -47,6 +18,7 @@
       document.querySelector<HTMLDivElement>(".right__click").style.display = "none";
       textarea.focus();
     };
+
     const copyBtn = document.querySelector("#copier");
     const cutBtn = document.querySelector("#couper");
     const pasteBtn = document.querySelector("#coller");
@@ -153,7 +125,16 @@
     <button id="couper">couper</button>
     <button id="coller">coller</button>
   {:else if contextType === "sidebar"}
-    <button id="download__note" on:click={() => download(sidebarTarget.id)}>Télécharger</button>
-    <button id="delete__note" on:click={() => deleteNoteFn(`notes/${sidebarTarget.id}.txt`)}>Supprimer la note</button>
+    <button id="download__note" on:click={() => {
+      download(sidebarTarget.id);
+      reset();
+    }
+    }>Télécharger</button>
+    <button id="delete__note" on:click={async () => {
+      await deleteNote(sidebarTarget.id);
+      reset();
+      resetSidebar();
+    }
+    }>Supprimer la note</button>
   {/if}
 </div>

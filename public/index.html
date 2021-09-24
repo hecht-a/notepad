@@ -5,7 +5,7 @@
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
 <!--	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src http://localhost:*; connect-src ws://localhost:*">-->
 
-	<title>Electron Svelte Typescript</title>
+	<title>Notepad</title>
 
 	<link rel='icon' type='image/png' href='./favicon.png'>
 	<link rel='stylesheet' href='./global.css'>
@@ -13,6 +13,30 @@
 
 	<script defer src='./build/bundle.js'></script>
 	<script src="https://kit.fontawesome.com/861183627c.js" crossorigin="anonymous"></script>
+
+	<style>
+		.alertify-logs {
+			top: 3.3em !important;
+		}
+
+		.green, .error {
+			position: fixed;
+			word-wrap: break-word;
+			width: 200px;
+			height: auto;
+			box-shadow: rgba(0, 0, 0, 0.15) 2px 2px 3px;
+			border-radius: 10px;
+			margin-right: 1em;
+		}
+
+		.green {
+			background: #A3BE8C !important;
+		}
+
+		.error {
+			background: #BF616A !important;
+		}
+	</style>
 </head>
 
 <body>
