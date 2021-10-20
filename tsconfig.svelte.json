@@ -33,6 +33,6 @@
       ]
     }
   },
-  "include": ["src/frontend/**/*"],
+  "include": ["src/frontend/**/*", "src/App"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }
