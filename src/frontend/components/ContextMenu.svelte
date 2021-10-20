@@ -55,12 +55,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  export let contextType: string;
-  export let sidebarTarget: HTMLButtonElement;
-  export let resetSidebar: () => void;
-  export let deleteNote: (name: string) => Promise<void>;
-  export let download: (name: string) => Promise<void>;
-  let reset: () => void;
+  export let contextType: string = null;
+  export let sidebarTarget: HTMLButtonElement = null;
+  export let resetSidebar: () => void = null;
+  export let deleteNote: (name: string) => Promise<void> = null;
+  export let download: (name: string) => Promise<void> = null;
+  let reset: () => void = null;
 
   function copy(value: string): Promise<void> {
     return navigator.clipboard.writeText(value);
