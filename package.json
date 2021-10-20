@@ -1,33 +1,24 @@
 {
-  "name": "electron-svelte-typescript",
-  "description": "Template for desktop apps written with Electron, Svelte and Typescript.",
+  "name": "notepad",
+  "description": "Notepad written with Electron, Svelte and Typescript.",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fuzzc0re/electron-svelte-typescript.git"
+    "url": "git+https://github.com/hecht-a/notepad.git"
   },
   "author": {
-    "name": "fuzzc0re",
-    "email": "fuzzc0re@protonmail.com",
-    "url": "https://github.com/fuzzc0re"
+    "name": "HECHT Axel",
+    "email": "axel.hct@gmail.com",
+    "url": "https://github.com/hecht-a/notepad"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fuzzc0re/electron-svelte-typescript/issues"
+    "url": "https://github.com/hecht-a/notepad/issues"
   },
   "keywords": [
-    "electron",
-    "svelte",
-    "typescript",
-    "electron-builder",
-    "electron-log",
-    "tslint",
-    "ts-jest",
-    "electron-settings",
-    "electron-updater",
-    "rollup"
+    "notepad"
   ],
-  "homepage": "https://github.com/fuzzc0re/electron-svelte-typescript#readme",
+  "homepage": "https://github.com/hecht-a/notepad#readme",
   "main": "build/index.js",
   "scripts": {
     "prestart": "cross-env NODE_ENV=development node scripts/preBuild.js",
@@ -68,7 +59,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-typescript": "^8.2.5",
     "@tsconfig/svelte": "^2.0.1",
     "@types/clean-css": "^4.2.4",
@@ -93,6 +84,7 @@
     "rollup": "^2.52.2",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
@@ -105,13 +97,14 @@
     "typescript": "^4.3.4"
   },
   "build": {
-    "productName": "Electron Svelte Typescript",
-    "appId": "electron.svelte.typescript",
+    "productName": "Notepad",
+    "appId": "hecht.axel.notepad",
     "copyright": "Copyright © 2021 ${author}",
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "public/icon/icon.ico"
     },
     "mac": {
       "target": [
@@ -119,7 +112,8 @@
       ],
       "category": "productivity",
       "type": "distribution",
-      "hardenedRuntime": "true"
+      "hardenedRuntime": "true",
+      "icon": "public/icon.icns"
     },
     "linux": {
       "target": [
@@ -139,8 +133,8 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "fuzzc0re",
-        "repo": "electron-svelte-typescript"
+        "owner": "HECHT Axel",
+        "repo": "notepad"
       }
     ]
   }
