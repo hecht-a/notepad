@@ -8,7 +8,8 @@
     height: 100vh;
     overflow: hidden;
 
-    #sidebar, #container {
+    #sidebar,
+    #container {
       height: 100%;
       color: $snow-3;
 
@@ -62,7 +63,8 @@
         width: 100%;
         height: calc(100% - #{$containers-padding * 2} - #{$title-height});
 
-        textarea, input {
+        textarea,
+        input {
           margin: 0;
           width: 100%;
           background: transparent;
@@ -146,24 +148,27 @@
 
   type Options = {
     maxItems?: number;
-    type: "success" | "error";
+    type: "success" | "error" | "log";
     cb?: () => Promise<void> | void;
     duration?: number;
-  }
+  };
 
   async function notif(message: string, options?: Options) {
     const notification = alertify.setLogPosition("top right").setDelay(options.duration ?? 2000);
-    if(options) {
-      if("maxItems" in options) {
+    if (options) {
+      if ("maxItems" in options) {
         notification.setMaxLogItems(options.maxItems);
       }
     }
-    switch(options.type) {
+    switch (options.type) {
       case "success":
         notification.success(message);
         break;
       case "error":
         notification.error(message);
+        break;
+      case "log":
+        notification.log(message);
         break;
       default:
         notification.log(message);
@@ -171,7 +176,7 @@
     notification.setCloseLogOnClick(true);
     document.querySelectorAll(".alertify-logs > .success").forEach((elem) => elem.classList.add("green"));
 
-    if("cb" in options) {
+    if ("cb" in options) {
       await options.cb();
     }
   }
@@ -198,17 +203,17 @@
 
     const write = async (name: string, content: string): Promise<boolean> => {
       return db.addNote({ name, content, length: content.length });
-    }
+    };
 
     const update = async (id: number, content: string): Promise<number> => {
-      return db.updateNote(id, {content, "content-length": content.length});
-    }
+      return db.updateNote(id, { content, "content-length": content.length });
+    };
 
     deleteNote = async (name: string): Promise<void> => {
       await notif("Note supprimée avec succès.", { type: "success" });
       await db.deleteNote(name);
       reset();
-    }
+    };
 
     const read = async (note: string | number): Promise<Note | false> => {
       return db.getNote(note);
@@ -216,17 +221,20 @@
 
     const readAll = async (): Promise<Note[]> => {
       return db.loadNotes();
-    }
+    };
 
     async function setSidebarItems(sidebar: HTMLDivElement, noNotif = false) {
-      if(!noNotif) {
-        await notif("Chargements des notes", { maxItems: 1, type: "success", cb: async () => {
-          await readAll().then(async (i) => {
-            setItems(i);
-            await notif("Notes chargées", { type: "success" });
-          });
-
-        } });
+      if (!noNotif) {
+        await notif("Chargements des notes", {
+          maxItems: 1,
+          type: "success",
+          cb: async () => {
+            await readAll().then(async (i) => {
+              setItems(i);
+              await notif("Notes chargées", { type: "success" });
+            });
+          },
+        });
       } else {
         setItems(await readAll());
       }
@@ -241,16 +249,16 @@
         btn.textContent = noteName;
         btn.style.marginRight = "0.8em";
         btn.style.marginLeft = "0.8em";
-        if(i === items.length - 1) {
+        if (i === items.length - 1) {
           btn.style.marginBottom = "0";
         }
-        if(item.name === selected) {
-          document.querySelectorAll<HTMLButtonElement>(".item").forEach(b => b.style.backgroundColor = "");
+        if (item.name === selected) {
+          document.querySelectorAll<HTMLButtonElement>(".item").forEach((b) => (b.style.backgroundColor = ""));
           btn.style.backgroundColor = "#81A1C1";
         }
         notes.appendChild(btn);
         btn.addEventListener("click", async (e) => {
-          document.querySelectorAll<HTMLButtonElement>(".item").forEach(b => b.style.backgroundColor = "");
+          document.querySelectorAll<HTMLButtonElement>(".item").forEach((b) => (b.style.backgroundColor = ""));
           (e.target as HTMLButtonElement).style.backgroundColor = "#81A1C1";
           input.disabled = true;
           selected = noteName;
@@ -261,12 +269,12 @@
         });
         btn.addEventListener("contextmenu", (e) => {
           sidebarTarget = e.target as HTMLButtonElement;
-          e.preventDefault()
+          e.preventDefault();
           ctx.style.display = "flex";
           ctx.style.left = `${e.x}px`;
           ctx.style.top = `${e.y}px`;
           contextType = "sidebar";
-        })
+        });
       }
     }
 
@@ -277,25 +285,25 @@
       input.disabled = false;
       selected = null;
       setSidebarItems(sidebar, true);
-    }
+    };
 
     setSidebarItems(sidebar);
     input.focus();
 
     download = async (name: string) => {
-      const note = await read(name) as Note;
+      const note = (await read(name)) as Note;
 
       const data = URL.createObjectURL(new Blob([note.content], { type: "text/plain" }));
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = data;
       link.download = selected;
 
       link.dispatchEvent(
-        new MouseEvent('click', {
+        new MouseEvent("click", {
           bubbles: true,
           cancelable: true,
-          view: window
+          view: window,
         })
       );
 
@@ -306,18 +314,19 @@
     };
 
     async function save() {
-      if(text === "" || name === "") {
+      if (text === "" || name === "") {
         await notif("Il manque le nom et le contenu", { type: "error" });
         return;
       }
 
       name = name.length <= 8 ? name : name.slice(0, 8);
 
-      if(selected === null) {
-        if(await read(name) !== false) {
+      if (selected === null) {
+        if ((await read(name)) !== false) {
           await notif("La note existe déjà<br>Changement vers cette note", { type: "error" });
           selected = name;
-          text = (await read(name) as Note).content;
+          text = ((await read(name)) as Note).content;
+          input.disabled = true;
           return;
         }
         await write(name, text);
@@ -328,31 +337,56 @@
         const id = parseInt(textarea.getAttribute("selected-note"));
         await update(id, text);
         await notif("Note modifiée", { type: "success" });
-        selected = (await read(id) as Note).name;
+        selected = ((await read(id)) as Note).name;
       }
 
       input.disabled = true;
-      text = (await read(name) as Note).content;
+      text = ((await read(name)) as Note).content;
     }
 
+    window.addEventListener("drop", async (event) => {
+      const files = event.dataTransfer.files;
+      for (const file of files) {
+        let { name: fileName } = file;
+        const content = await file.text();
+        if (!/^.*(.txt)$/.test(fileName)) {
+          await notif(`Le fichier <b>${fileName}</b> n'est pas au format txt`, { type: "error" });
+          return;
+        }
+        name = fileName.split(".txt")[0].slice(0, 8);
+        if ((await read(name)) !== false) {
+          await notif("La note existe déjà<br>Changement vers cette note", { type: "log" });
+          selected = name;
+          text = ((await read(name)) as Note).content;
+          input.disabled = true;
+          return;
+        }
+        await write(name, content);
+        selected = name;
+        await notif("Note créée", { type: "success" });
+        await setSidebarItems(sidebar, true);
+        input.disabled = true;
+        text = ((await read(name)) as Note).content;
+      }
+    });
     textarea.addEventListener("keydown", (e) => {
       textarea.scrollTop = textarea.scrollHeight;
       if (e.code === "KeyS" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
-        if(text !== "") {
-          save()
+        if (text !== "") {
+          save();
         } else {
           deleteNote(selected);
         }
       } else if (e.code === "Backspace" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
-        if(text !== "") {
+        if (text !== "") {
           deleteNote(selected);
         }
       }
     });
     window.addEventListener("keydown", (e) => {
-      if(e.code === "KeyN" && (e.ctrlKey || e.metaKey)) {
+      if (e.code === "KeyN" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         reset();
         input.focus();
@@ -362,16 +396,16 @@
     saveNote.addEventListener("click", save);
     window.addEventListener("click", (e: PointerEvent) => {
       const excluded: HTMLDivElement[] = [ctx];
-      for(const c of ctx.children) {
-        excluded.push(<HTMLDivElement>c)
+      for (const c of ctx.children) {
+        excluded.push(<HTMLDivElement>c);
       }
 
-      if(!excluded.includes(e.target as HTMLDivElement)) {
+      if (!excluded.includes(e.target as HTMLDivElement)) {
         ctx.style.display = "none";
       }
     });
     textarea.addEventListener("contextmenu", (e: PointerEvent) => {
-      e.preventDefault()
+      e.preventDefault();
       ctx.style.display = "flex";
       ctx.style.left = `${e.x}px`;
       ctx.style.top = `${e.y}px`;
@@ -381,8 +415,7 @@
 </script>
 
 <main>
-  <ContextMenu bind:contextType={contextType} bind:sidebarTarget={sidebarTarget}
-               bind:resetSidebar={reset} bind:download={download} bind:deleteNote={deleteNote} />
+  <ContextMenu bind:contextType bind:sidebarTarget bind:resetSidebar="{reset}" bind:download bind:deleteNote />
   <div id="sidebar">
     <div class="title">
       <h3>Notes</h3>
@@ -394,18 +427,27 @@
     <div class="title container__title">
       <h3>Notes</h3>
       <div class="buttons">
-        {#if selected !== null }
-          <button class="icon" id="download"
-                  on:click={() => download(selected)}><i class="fas fa-file-download"></i></button>
-          <button class="icon" id="delete"
-                  on:click={() => deleteNote(selected)}><i class="fas fa-trash-alt"></i></button>
+        {#if selected !== null}
+          <button class="icon" id="download" on:click="{() => download(selected)}"
+            ><i class="fas fa-file-download"></i></button
+          >
+          <button class="icon" id="delete" on:click="{() => deleteNote(selected)}"
+            ><i class="fas fa-trash-alt"></i></button
+          >
         {/if}
         <button id="save">sauvegarder</button>
       </div>
     </div>
     <div class="input">
-      <input type="text" name="name" id="name" placeholder="Entrez le nom de la note" bind:value={name} maxlength="10" />
-      <textarea name="note" id="note" placeholder="Entrez votre texte" bind:value={text}></textarea>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        placeholder="Entrez le nom de la note"
+        bind:value="{name}"
+        maxlength="10"
+      />
+      <textarea name="note" id="note" placeholder="Entrez votre texte" bind:value="{text}"></textarea>
     </div>
   </div>
 </main>
