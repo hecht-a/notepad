@@ -2,7 +2,6 @@ import {
   app,
   BrowserWindow, ipcMain,
   Notification,
-  // nativeImage
 } from "electron";
 import { join } from "path";
 import { parse } from "url";
@@ -26,13 +25,10 @@ const createWindow = () => {
     width: 900,
     height: 680,
     webPreferences: {
-      // devTools: !isProd,
-      devTools: true,
+      devTools: !isProd,
       contextIsolation: true,
       enableRemoteModule: false,
     },
-    // TODO: set custom icon
-    icon: join(__dirname, "../public", "image0.icns")
   });
 
   const url =
@@ -98,10 +94,11 @@ app.on("web-contents-created", (e, contents) => {
   });
 });
 
-if (isProd)
+if (isProd) {
   autoUpdater.checkForUpdates().catch((err) => {
     logger.error(JSON.stringify(err));
   });
+}
 
 autoUpdater.logger = logger;
 
