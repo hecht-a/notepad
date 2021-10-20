@@ -1,8 +1,4 @@
-import {
-  app,
-  BrowserWindow, ipcMain,
-  Notification,
-} from "electron";
+import { app, BrowserWindow, ipcMain, Notification } from "electron";
 import { join } from "path";
 import { parse } from "url";
 import { autoUpdater } from "electron-updater";
@@ -149,16 +145,16 @@ autoUpdater.on("error", (err) => {
   notification.show();
 });
 
-ipcMain.on('asynchronous-message', (event, arg) => {
+ipcMain.on("asynchronous-message", (event, arg) => {
   // eslint-disable-next-line no-console
-  console.log(arg)
+  console.log(arg);
 
-  event.sender.send('asynchronous-reply', 'async pong')
-})
+  event.sender.send("asynchronous-reply", "async pong");
+});
 
-ipcMain.on('synchronous-message', (event, arg) => {
+ipcMain.on("synchronous-message", (event, arg) => {
   // eslint-disable-next-line no-console
-  console.log(arg)
+  console.log(arg);
 
-  event.returnValue = 'sync pong'
-})
+  event.returnValue = "sync pong";
+});

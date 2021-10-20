@@ -6,6 +6,6 @@ export type NoteModel = {
   length: number;
 };
 
-export type Note = Omit<NoteModel, "tableName">
+export type Note = Omit<NoteModel, "tableName">;
 
 export type Model = NoteModel;

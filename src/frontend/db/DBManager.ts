@@ -10,13 +10,13 @@ export class DBManager {
   private static version = 1;
 
   constructor(name: string) {
-    if(!name) {
-      name = "null"
+    if (!name) {
+      name = "null";
     }
     this._name = name;
     this.db = new Dexie(name);
     this.db.version(DBManager.version).stores({
-      notes: "++id, &name, content, length"
+      notes: "++id, &name, content, length",
     });
     // eslint-disable-next-line no-console
     console.log("database initialized");
@@ -33,21 +33,24 @@ export class DBManager {
 
   public async getNote(note: string | number): Promise<Note | false> {
     const table: Table<Note, number> = this.getTable("notes");
-    return table.where(typeof note === "number" ? { id: note } : { name: note }).toArray()
+    return table
+      .where(typeof note === "number" ? { id: note } : { name: note })
+      .toArray()
       .then((n) => n[0] ?? false)
       .catch(() => false);
   }
 
   public async addNote(note: Omit<Note, "id">): Promise<boolean> {
     const table: Table<Omit<Note, "id">, number> = this.getTable("notes");
-    return table.put(note)
+    return table
+      .put(note)
       .then(() => true)
       .catch(() => false);
   }
 
-  public async updateNote(id: number, changes: {"content": string, "content-length": number}): Promise<number> {
+  public async updateNote(id: number, changes: { content: string; "content-length": number }): Promise<number> {
     const table: Table<Note, number> = this.getTable("notes");
-    return table.update(id, changes)
+    return table.update(id, changes);
   }
 
   public async deleteNote(note: string | number): Promise<number> {
@@ -55,7 +58,9 @@ export class DBManager {
     return table.where(/\d+/.test(String(note)) ? { id: Number(note) } : { name: note }).delete();
   }
 
-  private getTable<TableModel extends Model, IndexableType>(schema: TableModel["tableName"]): Table<TableModel, IndexableType> {
+  private getTable<TableModel extends Model, IndexableType>(
+    schema: TableModel["tableName"]
+  ): Table<TableModel, IndexableType> {
     return this.db.table(schema);
   }
 }

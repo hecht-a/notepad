@@ -47,6 +47,9 @@
     "lint:electron": "eslint -c eslint.electron.json --ext .js,.ts src/electron",
     "lint:svelte": "eslint -c eslint.svelte.json --ext .js,.ts src/frontend",
     "lint": "npm-run-all -s lint:electron lint:svelte",
+    "lint:electron:fix": "eslint -c eslint.electron.json --ext .js,.ts src/electron --fix",
+    "lint:svelte:fix": "eslint -c eslint.svelte.json --ext .js,.ts src/frontend --fix",
+    "lint:fix": "npm-run-all -s lint:electron:fix lint:svelte:fix",
     "prepublishOnly": "npm-run-all -s test lint",
     "preversion": "npm-run-all -s lint format"
   },
