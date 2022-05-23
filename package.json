@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@labeg/alertify.js": "^2.0.62",
-    "dexie": "^3.0.3",
+    "dexie": "^3.2.2",
     "electron-log": "^4.3.5",
     "electron-store": "^8.0.0",
     "electron-updater": "^4.3.9"
